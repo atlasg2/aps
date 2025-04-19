@@ -1,0 +1,152 @@
+📜 Ground Rules for Claude
+Stay inside scope. Implement only what the current phase asks for.
+
+
+Ask if blocked. If requirements are ambiguous, open a clarification comment.
+
+
+One feature = one PR. Keep diffs small; aim ≤ 400 LOC changed.
+
+
+Pass CI. pnpm lint && pnpm test && pnpm build must be green before requesting review.
+
+
+Commit style. Conventional commits (feat: contacts crud, chore: add eslint).
+
+
+Docs first. Update code comments & README.md for every new public API.
+
+
+No secrets. Read runtime secrets from Codespace dev‑container environment.
+
+
+
+🛠 Tech Stack (already chosen)
+Layer
+Tooling
+Frontend
+Next.js 14 (app router) + shadcn/ui + TailwindCSS
+API / RPC
+tRPC
+ORM / DB
+Prisma → PostgreSQL (use DATABASE_URL in devcontainer)
+Auth
+Clerk (org = Account)
+Messaging
+Twilio SMS, SendGrid Email
+Payments
+Stripe w/ Level‑3 data
+Monorepo
+TurboRepo + PNPM
+
+
+🗂 Initial Repo Skeleton (Phase 0 output)
+/apps
+  /web
+    /app
+    /components
+    /lib
+    /prisma
+      schema.prisma
+      seed/products.json
+  /api   (optional later)
+* .env.example
+* turbo.json
+* Dockerfile
+* README.md
+* README_AI.md   <-- (this file)
+
+🔀 Phase Roadmap & Checklists
+How to start a phase: create a GitHub Issue titled Phase N – <name> and copy its checklist. Claude will open a branch phase-N-<slug> and tick items.
+Phase 0 — Bootstrap & Tooling
+Init PNPM workspace + TurboRepo.
+
+
+Add Prettier, ESLint, Husky pre‑commit hook.
+
+
+Create devcontainer with Node 20 + Postgres 15.
+
+
+Commit empty Next.js (apps/web) project that renders “It works”.
+
+
+Add schema.prisma with no models yet; run prisma init.
+
+
+Phase 1 — Data Models & Migration
+Add all Prisma models exactly as defined in ER‑lite table.
+
+
+Run npx prisma migrate dev --name init in Codespace.
+
+
+Implement seed script loading seed/products.json.
+
+
+Push migration & verify db ‑› screenshot in PR comment.
+
+
+Phase 2 — Auth & Multitenancy
+Install Clerk SDK; wire callback to create Account on first login.
+
+
+Add withAuth() middleware to tRPC.
+
+
+Protect /dashboard; redirect unauth users.
+
+
+Phase 3 — Contacts CRUD MVP
+Generate trpc/contacts.ts routers (list, create, update, delete).
+
+
+Build simple table UI with modal form (shadcn/ui).
+
+
+Add Cypress e2e test that logs in (Clerk test user) and creates a contact.
+
+
+Phase 4 — Products Module
+Table & import‑CSV flow.
+
+
+Validation (sku unique per account).
+
+
+Phase 5 — Jobs + JobItems + Quote PDF
+Job create wizard (select contact → add items).
+
+
+Generate PDF via React‑PDF; save to public/quotes/{jobId}.pdf.
+
+
+Phase 6 — Scheduler (D‑n‑D)
+Create /schedule board with react‑beautiful‑dnd.
+
+
+Twilio stub sends SMS to fake number in dev.
+
+
+Phase 7 — Invoices & Stripe L3
+Auto‑create invoice from Job.
+
+
+Stripe Checkout; webhook marks paid & creates ReviewRequest.
+
+
+Phase 8 — Review / Referral Automations
+SendGrid email + Twilio SMS templates.
+
+
+Referral table & payout tracking.
+
+
+Phase 9 — Reporting & Polish
+Dashboard tiles (GP, close rate, review score).
+
+
+Role‑based access (installer vs admin).
+
+
+PWA manifest for offline visits.
